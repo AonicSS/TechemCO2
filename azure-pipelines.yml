@@ -34,8 +34,7 @@ steps:
     replaceExistingArchive: true
 
 
-- task: PublishBuildArtifacts@1
+- task: PublishBuildArtifacts@0
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    ArtifactName: 'new'
+    TargetPath: '$(Build.ArtifactStagingDirectory)'
