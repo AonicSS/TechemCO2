@@ -1,3 +1,4 @@
+import React from 'react'
 import InfoModal from '../Modal/modal'
 import './style.css'
 

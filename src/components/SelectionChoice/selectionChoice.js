@@ -1,3 +1,4 @@
+import React from 'react'
 import './style.css'
 
 import IconFlussiggas from '../../assets/icons/IconFlussiggas.svg'
