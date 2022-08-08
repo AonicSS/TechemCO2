@@ -1,0 +1,42 @@
+.modal-popup {
+    cursor: pointer;
+}
+
+.modal-content {
+    font-family: 'Univers LT Std';
+    border-radius: 0.3rem;
+}
+
+.modal-info-icon {
+    width: 40px;
+}
+
+.modal-header {
+    border-bottom: none;
+    gap: 15px;
+    justify-content: flex-start;
+    margin-top: 25px;
+}
+
+.modal-header .btn-close {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+
+.modal-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.modal-body {
+    margin-left: 55px;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+.modal-footer .btn-continue {
+    padding: 10px 20px;
+}

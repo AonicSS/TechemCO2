@@ -1,0 +1,32 @@
+.btn-back {
+    border: none;
+    background-color: white;
+    position: relative;
+    width: 100%;
+}
+
+.btn-back img {
+    position: absolute;
+    left: 0px;
+    top: -85px;
+}
+
+.btn-continue {
+    background-color: #E20613;
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+}
+
+.btn-continue:hover {
+    background-color: #E20613;
+    color: white;
+}
+
+.btn-continue:disabled {
+    background-color: #EDEBE9;
+    color: #605E5C80;
+}
+
