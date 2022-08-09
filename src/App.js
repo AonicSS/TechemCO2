@@ -13,7 +13,6 @@ function App() {
 
   return (
     <div className="App d-flex flex-column align-items-center">
-      <h3>Development Branch</h3>
       <Stepper currentState={currentState}></Stepper>
       {currentState > 0 ? (<BackButton currentSelected={currentSelected}
         setCurrentSelected={setCurrentSelected}
