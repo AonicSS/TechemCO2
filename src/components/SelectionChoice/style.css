@@ -13,3 +13,103 @@
 input[type='radio'] {
     accent-color: #E20613;
 }
+
+.form-check-input:checked {
+    background-color: #E20613;
+    border-color: #E20613;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.form-control:focus,
+.unit .btn {
+    box-shadow: none;
+}
+
+.unit.btn-group {
+    margin-left: -6.5em;
+}
+
+.unit .btn {
+    border: 1px solid #c6c6c6;
+    background-color: #C6C6C6;
+    border: none;
+}
+
+.unit {
+    margin-left: -1.3em;
+    font-family: 'Univers B';
+}
+
+.active-unit {
+    background-color: white !important;
+    border-left: none !important;
+}
+
+.consent-text {
+    font-size: 13px;
+}
+
+.email-img-content {
+    position: relative;
+}
+
+.icon-email {
+    position: absolute;
+    width: 100px;
+    top: -5px;
+    left: -30px;
+}
+
+.image-email {
+    width: 100%;
+    border-radius: 0px 0px 50px 0px;
+}
+
+.report-section .hstack {
+    justify-content: space-between;
+    align-items: end;
+}
+
+.report-section .choice-text {
+    margin-bottom: 0px;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.landlord-dot {
+    background-color: rgba(0, 155, 180, 1);
+}
+
+.tenant-dot {
+    background-color: rgba(0, 155, 180, 0.15);
+}
+
+.icon-heizung {
+    width: 110px;
+    cursor: pointer;
+}
+
+.cross-text {
+    text-decoration: line-through;
+}
+
+.discount-text {
+    color: #E20613;
+}

@@ -4,21 +4,37 @@ import "./style.css"
 import IconBack from '../../assets/icons/IconBack.svg'
 
 const handleNext = (props) => () => {
-    props.setCurrentSelected(0)
+    if (props.currentState === 5) {
+        console.log('handle pdf creation')
+        return
+    }
     props.setCurrentState(props.currentState + 1)
+    props.setCanContinue(false)
 }
 
 const handlePrevious = (props) => () => {
-    props.setCurrentSelected(0)
+    console.log(props)
     props.setCurrentState(props.currentState - 1)
+    props.setCanContinue(false)
 }
 
 const ContinueButton = (props) => {
+    let BtnName
+    if (props.currentState === 3) {
+        BtnName = 'Jetzt Prognose anzeigen'
+    } else if (props.currentState === 4) {
+        BtnName = 'Jetzt Kosten reduzieren'
+    } else if (props.currentState === 5) {
+        BtnName = 'Mehr zum HeizungsCheck'
+    }
+    else {
+        BtnName = 'Weiter'
+    }
     return (
         <>
-            {props.currentSelected
-                ? (<Button variant="continue" onClick={handleNext(props)}>Weiter</Button>)
-                : (<Button variant="continue" disabled>Weiter</Button>)}
+            {props.canContinue
+                ? (<Button variant="continue" onClick={handleNext(props)}>{BtnName}</Button>)
+                : (<Button variant="continue" disabled>{BtnName}</Button>)}
         </>
     )
 }
@@ -29,4 +45,4 @@ const BackButton = (props) => {
     )
 }
 
-export {ContinueButton, BackButton}
+export { ContinueButton, BackButton }

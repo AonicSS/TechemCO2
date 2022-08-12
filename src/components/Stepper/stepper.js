@@ -3,7 +3,6 @@ import InfoModal from '../Modal/modal'
 import './style.css'
 
 const StepperNav = ({ currentState }) => {
-    console.log(currentState)
     return (
         <div className='stepper-nav d-flex mt-5 mb-5'>
             <StepperNavItem addActive={currentState === 1 ? 'nav-active' : ''}></StepperNavItem>
@@ -20,7 +19,9 @@ const StepperNavItem = ({ addActive }) => {
 }
 
 const StepperText = ({ currentState }) => {
-    const stepText = ['Mit welcher Energiequelle wird geheizt?', 'Wie hoch ist der jährliche Brennstoffverbrauch', 'Wie groß ist die Grundfläche aller Wohnräume?']
+    const stepText = ['Mit welcher Energiequelle wird geheizt?',
+        'Wie hoch ist der jährliche Brennstoffverbrauch',
+        'Wie groß ist die Grundfläche aller Wohnräume?']
     const currentText = stepText[currentState]
     return (
         <div className='stepper-text'>{currentText}</div>
@@ -32,10 +33,10 @@ const Stepper = (props) => {
     return (
         <>
             <StepperNav currentState={props.currentState}></StepperNav>
-            <div className='stepper-header d-flex mb-5'>
+            {props.currentState < 3 ? (<div className='stepper-header d-flex mb-5'>
                 <StepperText currentState={props.currentState}></StepperText>
                 <InfoModal currentState={props.currentState}></InfoModal>
-            </div>
+            </div>) : ''}
         </>
     )
 }
