@@ -2,10 +2,26 @@ import React from "react"
 import { Button } from "react-bootstrap"
 import "./style.css"
 import IconBack from '../../assets/icons/IconBack.svg'
+import html2canvas from 'html2canvas'
+import { jsPDF } from "jspdf"
+
+
 
 const handleNext = (props) => () => {
     if (props.currentState === 5) {
-        console.log('handle pdf creation')
+        const input = document.getElementsByClassName('report-section')[0]
+        html2canvas(input)
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png')
+                const pdf = new jsPDF({
+                    orientation: 'l',
+                    unit: 'pt',
+                    format: [canvas.width + 160, canvas.height + 160],
+                })
+                pdf.addImage(imgData, 'PNG', 65, 40, canvas.width, canvas.height, 'kostenprognose', 'SLOW');
+                const pdfURL = pdf.output("bloburl")
+                window.open(pdfURL, "_blank")
+            })
         return
     }
     props.setCurrentState(props.currentState + 1)

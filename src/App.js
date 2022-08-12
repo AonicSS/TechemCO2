@@ -8,16 +8,16 @@ import SelectionChoice from "./components/SelectionChoice/selectionChoice"
 import FinalPage from "./components/FinalPage/finalPage";
 import { ContinueButton, BackButton } from "./components/Button/button"
 
-function App() {
-  const [currentState, setCurrentState] = useState(4)
-  const [currentSelected, setCurrentSelected] = useState(2)
+const App = () => {
+  const [currentState, setCurrentState] = useState(0)
+  const [currentSelected, setCurrentSelected] = useState(0)
   const [canContinue, setCanContinue] = useState(false)
-  const [Consumption, setConsumption] = useState({'Unit':'kWh', 'Value':'28000'})
-  const [TotalArea, setTotalArea] = useState(300)
+  const [Consumption, setConsumption] = useState()
+  const [TotalArea, setTotalArea] = useState()
   const [Email, setEmail] = useState('')
 
   return (
-    <div className="App d-flex flex-column align-items-center container">
+    <div className="App d-flex flex-column align-items-center container mb-5">
 
       {currentState > 3
         ? ('')

@@ -27,7 +27,6 @@ import IconEmail from '../../assets/images/EmailRedCircle.svg'
 import IconHeizungsCheck from '../../assets/icons/IconHeizungsCheck.svg'
 import IconHeizungsActive from '../../assets/icons/IconHeizungsActive.svg'
 
-
 const Selection = (props) => {
     return (
         <div className='choice-item'>
@@ -304,24 +303,34 @@ const FourthSelection = ({ props }) => {
         const perMeterEmission = TotalEmission() / props.TotalArea
         switch (true) {
             case (perMeterEmission < 12):
+                console.log('Your share is 0')
                 return 0
             case (12 < perMeterEmission && perMeterEmission < 17):
+                console.log('Your share is 10')
                 return 10
             case (17 < perMeterEmission && perMeterEmission < 22):
+                console.log('Your share is 20')
                 return 20
             case (22 < perMeterEmission && perMeterEmission < 27):
+                console.log('Your share is 30')
                 return 30
             case (27 < perMeterEmission && perMeterEmission < 32):
+                console.log('Your share is 40')
                 return 40
             case 32 < perMeterEmission && perMeterEmission < 37:
+                console.log('Your share is 50')
                 return 50
             case 37 < perMeterEmission && perMeterEmission < 42:
+                console.log('Your share is 60')
                 return 60
             case 42 < perMeterEmission && perMeterEmission < 47:
+                console.log('Your share is 70')
                 return 70
             case 47 < perMeterEmission && perMeterEmission < 52:
+                console.log('Your share is 80')
                 return 80
             case perMeterEmission >= 52:
+                console.log('Your share is 90')
                 return 90
             default:
                 return 0
@@ -378,14 +387,14 @@ const FourthSelection = ({ props }) => {
         }
     })
 
-    let dataFillVermietende = dataFillMietende.map((item) => parseFloat(item - (item * (CalculateShare() / 100))).toFixed(2))
-    let dataDiscount = dataFillVermietende.map((item) => parseFloat(item - (item * 0.1)).toFixed(2))
+    let dataFillVermietende = dataFillMietende.map((item) => parseFloat((item * (CalculateShare() / 100))).toFixed(2))
+    let dataDiscount = dataFillVermietende.map((item) => parseFloat(item - (item * 0.08)).toFixed(2))
 
     const CalculateYearlyCost = (data) => {
-        const sum = data.reduce((partial, current) =>  {
+        const sum = data.reduce((partial, current) => {
             return parseFloat(partial) + parseFloat(current)
         }, [0])
-        return sum
+        return parseFloat(sum).toFixed(2)
     }
 
     let dataset
@@ -483,10 +492,11 @@ const FourthSelection = ({ props }) => {
                                 10 Jahre <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
                                 Gesamtkosten
                             </div>
-                            <div className={showDiscount ? 'cross-text' : ''}>{CalculateYearlyCost(dataFillMietende)} €
+                            <div className={showDiscount ? 'cross-text' : ''}>{CalculateYearlyCost(dataFillVermietende)} €
                             </div>
                             {showDiscount
-                                ? (<div className='discount-text'>{CalculateYearlyCost(dataFillMietende) - (CalculateYearlyCost(dataFillMietende) * 0.1)} €</div>)
+                                ? (<><div className='discount-text'>{parseFloat(CalculateYearlyCost(dataFillVermietende) - (CalculateYearlyCost(dataFillVermietende) * 0.08)).toFixed(2)} €</div>
+                                    <InfoModal currentState={props.currentState} InfoToShow={5}></InfoModal></>)
                                 : ('')}
                         </Stack>
                     </Col>
@@ -528,7 +538,7 @@ const FourthSelection = ({ props }) => {
                                 10 Jahre <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
                                 Gesamtkosten
                             </div>
-                            <div>{CalculateYearlyCost(dataFillMietende)} €
+                            <div>{CalculateYearlyCost(dataFillVermietende)} €
                             </div>
                         </Stack>
                     </Stack>

@@ -23,13 +23,15 @@ const InfoModal = (props) => {
         'Mit welcher Energiequelle wird geheizt?',
         'Wie groß ist die Wohnfläche Ihrer Immobilie?',
         '',
+        '',
         '']
 
     const modalBodyText = ['Mit dieser Angabe können wir Ihnen im nächsten Schritt die richtige Einheit zur Berechnung anbieten.',
         'Den jährlichen Brennstoffverbrauch können Sie der Jahresrechnung Ihres Energieversorgungsunternehmens entnehmen.',
         'Die CO2-Abgabe ist für alle Wohngebäude einschließlich Wohn-, Alten- und Pflegeheime sowie Gebäude mit gemischter Nutzung vorgesehen. Die Wohnfläche ist die Summe der Grundflächen aller Wohnflächen.',
         'Die voraussichtliche CO2-Emission Ihres Gebäudes ist gemäß Ihrer Angabe des aktuellen Energieverbrauchs für einen Zeithorizont von 10 Jahren berechnet.',
-        'Damit Sie umfassend planen können, berechnen wir für Sie die voraussichtliche CO2-Abgabe mit einem Zeithorizont von 10 Jahren. Die Summe beinhaltet sowohl die Kosten, die Vermieter als auch Mieter tragen müssen.']
+        'Damit Sie umfassend planen können, berechnen wir für Sie die voraussichtliche CO2-Abgabe mit einem Zeithorizont von 10 Jahren. Die Summe beinhaltet sowohl die Kosten, die Vermieter als auch Mieter tragen müssen.',
+        'Unserer Erfahrung nach können Sie mithilfe der Maßnahmen aus dem Heizungscheck bis zu 8% Energieverbrauch einsparen. Dies hilft nicht nur Ihren Mietern, sondern auch Ihnen bei der Reduktion Ihrer CO2-Abgabe. Bitte beachten Sie, dass die Reduktion 8% nur ein Beispielwert ist, welcher individuell abweichen kann.']
 
     const selectedHeaderText = props.InfoToShow ? modalHeadlineText[props.InfoToShow] : modalHeadlineText[props.currentState]
     const selectedBodyText = props.InfoToShow ? modalBodyText[props.InfoToShow] : modalBodyText[props.currentState]
