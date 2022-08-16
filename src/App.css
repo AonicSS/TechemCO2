@@ -29,7 +29,19 @@
   }
 
   .App {
+    font-family: Univers Roman;
+  }
+
+  .univers-normal {
     font-family: Univers LT Std;
+  }
+
+  .univers-bold {
+    font-family: Univers B;
+  }
+
+  .univers-roman {
+    font-family: Univers Roman;
   }
 
   input {

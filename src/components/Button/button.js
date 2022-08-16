@@ -29,16 +29,16 @@ const handleNext = (props) => () => {
 }
 
 const handlePrevious = (props) => () => {
-    console.log(props)
     props.setCurrentState(props.currentState - 1)
     props.setCanContinue(false)
 }
 
 const ContinueButton = (props) => {
-    let BtnName
+    let BtnName, customClass
     if (props.currentState === 3) {
         BtnName = 'Jetzt Prognose anzeigen'
     } else if (props.currentState === 4) {
+        customClass = 'move-top'
         BtnName = 'Jetzt Kosten reduzieren'
     } else if (props.currentState === 5) {
         BtnName = 'Mehr zum HeizungsCheck'
@@ -49,7 +49,7 @@ const ContinueButton = (props) => {
     return (
         <>
             {props.canContinue
-                ? (<Button variant="continue" onClick={handleNext(props)}>{BtnName}</Button>)
+                ? (<Button variant="continue" className={customClass ? customClass : ''} onClick={handleNext(props)}>{BtnName}</Button>)
                 : (<Button variant="continue" disabled>{BtnName}</Button>)}
         </>
     )
@@ -57,7 +57,14 @@ const ContinueButton = (props) => {
 
 const BackButton = (props) => {
     return (
-        <button className="btn-back" onClick={handlePrevious(props)}><img src={IconBack} alt='back-icon' /></button>
+        props.currentState > 4
+            ? ('') :
+            (<button className={`btn-back univers-bold ${props.currentState === 4 ? 'grey-box-alt' : ''}`}
+                onClick={handlePrevious(props)}>
+                <img src={IconBack} alt='back-icon' />
+                {props.currentState === 4 ? 'Zurück' : ''}
+            </button>)
+
     )
 }
 

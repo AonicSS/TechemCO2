@@ -6,7 +6,7 @@ import './App.css'
 import Stepper from "./components/Stepper/stepper"
 import SelectionChoice from "./components/SelectionChoice/selectionChoice"
 import FinalPage from "./components/FinalPage/finalPage";
-import { ContinueButton, BackButton } from "./components/Button/button"
+import { ContinueButton } from "./components/Button/button"
 
 const App = () => {
   const [currentState, setCurrentState] = useState(0)
@@ -16,22 +16,18 @@ const App = () => {
   const [TotalArea, setTotalArea] = useState()
   const [Email, setEmail] = useState('')
 
+  currentState === 4 ? document.body.style.background = '#d9d9d980' : document.body.style.background = 'white'
+
   return (
     <div className="App d-flex flex-column align-items-center container mb-5">
 
       {currentState > 3
         ? ('')
-        : (<Stepper currentState={currentState}></Stepper>)}
-
-      {currentState > 0
-        ? (<BackButton currentSelected={currentSelected}
-          setCurrentSelected={setCurrentSelected}
-          currentState={currentState}
+        : (<Stepper currentState={currentState}
           setCurrentState={setCurrentState}
-          setCanContinue={setCanContinue} />)
-        : ''}
+          setCanContinue={setCanContinue}></Stepper>)}
 
-      {currentState === 5 ? (<FinalPage />) : ''} 
+      {currentState === 5 ? (<FinalPage />) : ''}
 
       <SelectionChoice currentState={currentState}
         setCurrentState={setCurrentState}

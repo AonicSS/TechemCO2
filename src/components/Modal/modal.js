@@ -18,7 +18,6 @@ const InfoModal = (props) => {
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
 
-    console.log(props)
     const modalHeadlineText = ['Mit welcher Energiequelle wird geheizt?',
         'Mit welcher Energiequelle wird geheizt?',
         'Wie groß ist die Wohnfläche Ihrer Immobilie?',
@@ -36,8 +35,6 @@ const InfoModal = (props) => {
     const selectedHeaderText = props.InfoToShow ? modalHeadlineText[props.InfoToShow] : modalHeadlineText[props.currentState]
     const selectedBodyText = props.InfoToShow ? modalBodyText[props.InfoToShow] : modalBodyText[props.currentState]
 
-    console.log(selectedBodyText)
-
     return (
         <>
             <img className='modal-popup'
@@ -49,11 +46,11 @@ const InfoModal = (props) => {
 
             <Modal size='lg' show={show} onHide={handleClose} centered>
                 <Row>
-                    <Col md={1} className='pt-4 ps-4'>
+                    <Col md={1} className='mt-5 ps-4'>
                         <img className='modal-info-icon' src={InfoIcon} alt='info-icon' />
                     </Col>
                     <Col md={11}>
-                        <Modal.Header closeButton>
+                        <Modal.Header closeButton className={props.currentState > 3 ? ('') : ('mt-4')}>
                             {selectedHeaderText ? (<Modal.Title>{selectedHeaderText}</Modal.Title>) : ''}
                         </Modal.Header>
                         <Modal.Body>{selectedBodyText}</Modal.Body>

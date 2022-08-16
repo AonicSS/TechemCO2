@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import Validator from 'validator'
 import { ButtonGroup, Button, Form, Stack, Row, Col } from 'react-bootstrap'
 import InfoModal from '../Modal/modal'
+
+import { BackButton } from '../Button/button'
 import './style.css'
 
 import {
@@ -9,8 +12,7 @@ import {
     CategoryScale,
     LinearScale,
     BarElement,
-    Title,
-    Tooltip,
+    Title
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels'
@@ -120,7 +122,7 @@ const FirstSelection = ({ props }) => {
                         {selectedName !== 'Erdgas'
                             ? (<span className='unit'>L</span>)
                             : (<ButtonGroup className='unit'>
-                                <Button variant='unit' className={SelectedUnit === 'kWh' ? 'active-unit' : ''} onClick={handleUnitChange}>kwh</Button>
+                                <Button variant='unit' className={SelectedUnit === 'kWh' ? 'active-unit' : ''} onClick={handleUnitChange}>kWh</Button>
                                 <Button variant='unit' className={SelectedUnit === 'm3' ? 'active-unit' : ''} onClick={handleUnitChange}>m3</Button>
                             </ButtonGroup>)}
                     </Form.Group>
@@ -149,8 +151,8 @@ const SecondSelection = ({ props }) => {
                 </div>
                 <Form>
                     <Form.Group className='d-flex align-items-center' controlId="formInput">
-                        <Form.Control type="number" placeholder="Wert eintragen" className={`pt-2 pe-4'}`} onChange={handleInputChange(props)} />
-                        <span className='unit'>m2</span>
+                        <Form.Control type="number" placeholder="Wert eintragen" className={`pt-2 pe-4`} onChange={handleInputChange(props)} />
+                        <span className='unit unit-meter'>m2</span>
                     </Form.Group>
                 </Form>
             </Stack>
@@ -199,7 +201,13 @@ const ThirdSelection = ({ props }) => {
 
     return (
         <Row className='d-flex justify-content-between'>
-            <Col md={6}>
+            <Col md={1} className='ps-0 pe-0'>
+                <BackButton
+                    currentState={props.currentState}
+                    setCurrentState={props.setCurrentState}
+                    setCanContinue={props.setCanContinue} />
+            </Col>
+            <Col md={5} className='ps-0'>
                 <h3 className='stepper-text text-center'>
                     Ihre kostenlose CO2-Kostenprognose <br /> ist nur einen Klick entfernt
                 </h3>
@@ -223,7 +231,7 @@ const ThirdSelection = ({ props }) => {
                     </Form.Group>
                 </Form>
             </Col>
-            <Col md={6}>
+            <Col md={6} className='ps-4'>
                 <div className='email-img-content'>
                     <img className='icon-email' src={IconEmail} alt='email-icon'></img>
                     <img className='image-email' src={ImageEmail} alt='email-img'></img>
@@ -234,39 +242,21 @@ const ThirdSelection = ({ props }) => {
 }
 
 const FourthSelection = ({ props }) => {
+    const [fetchedData, setFetchedData] = useState([])
     const [showDiscount, setShowDiscount] = useState(false)
+    const InitialPricePerTon = 35
 
     useEffect(() => {
         props.setCanContinue(true)
     }, [])
 
-    const InitialPricePerTon = 35
-    const ComputationData = {
-        'Erdgas': [{
-            'Unit': 'kWh',
-            'EmissionFactor': 241.1,
-            'Heizwert': 1.0,
-            'Brennwert': 1.11
-        },
-        {
-            'Unit': 'm3',
-            'EmissionFactor': 241.1,
-            'Heizwert': 10.0,
-            'Brennwert': 1.0
-        }],
-        'Flüssiggas': {
-            'Unit': 'L',
-            'EmissionFactor': 241.1,
-            'Heizwert': 6.57,
-            'Brennwert': 1.0
-        },
-        'Heizöl': {
-            'Unit': 'L',
-            'EmissionFactor': 312.7,
-            'Heizwert': 10.0,
-            'Brennwert': 1.0
-        }
-    }
+    useEffect(() => {
+        console.log('effect fired')
+        axios.get('http://localhost:3001/')
+            .then((response) => {
+                setFetchedData(response.data)
+            })
+    }, [])
 
     let selectedName, selectedIcon
     if (props.currentSelected === 1) {
@@ -283,17 +273,18 @@ const FourthSelection = ({ props }) => {
     const TotalEmission = () => {
         switch (selectedName) {
             case 'Erdgas':
-                return CalculateTotalEmission(ComputationData.Erdgas.filter(item => item.Unit === props.Consumption.Unit)[0])
+                return CalculateTotalEmission(fetchedData.length ? (fetchedData[0].Erdgas.filter(item => item.Unit === props.Consumption.Unit)[0]) : '')
             case 'Flüssiggas':
-                return CalculateTotalEmission(ComputationData.Flüssiggas)
+                return CalculateTotalEmission(fetchedData.length ? (fetchedData[0].Flüssiggas) : '')
             case 'Heizöl':
-                return CalculateTotalEmission(ComputationData.Heizöl)
+                return CalculateTotalEmission(fetchedData.length ? (fetchedData[0].Heizöl) : '')
             default:
                 return
         }
     }
 
     const CalculateTotalEmission = (selectedData) => {
+        console.log(selectedData)
         return ((((parseInt(props.Consumption.Value)
             * selectedData.Heizwert) / selectedData.Brennwert)
             * selectedData.EmissionFactor) / 1000)
@@ -346,7 +337,6 @@ const FourthSelection = ({ props }) => {
         LinearScale,
         BarElement,
         Title,
-        Tooltip,
         ChartDataLabels
     )
 
@@ -372,6 +362,11 @@ const FourthSelection = ({ props }) => {
                     display: false
                 }
             },
+        },
+        layout: {
+            padding: {
+                top: 20
+            }
         }
     }
 
@@ -388,7 +383,10 @@ const FourthSelection = ({ props }) => {
     })
 
     let dataFillVermietende = dataFillMietende.map((item) => parseFloat((item * (CalculateShare() / 100))).toFixed(2))
-    let dataDiscount = dataFillVermietende.map((item) => parseFloat(item - (item * 0.08)).toFixed(2))
+
+    let dataDiscountMietende = dataFillMietende.map((item) => parseFloat(item - (item * 0.08)).toFixed(2))
+
+    let dataDiscountVermietende = dataDiscountMietende.map((item) => parseFloat((item * (CalculateShare() / 100))).toFixed(2))
 
     const CalculateYearlyCost = (data) => {
         const sum = data.reduce((partial, current) => {
@@ -403,7 +401,7 @@ const FourthSelection = ({ props }) => {
         dataset = [
             {
                 label: 'Discount',
-                data: dataDiscount,
+                data: dataDiscountVermietende,
                 backgroundColor: 'rgba(226, 6, 19, 1)',
                 datalabels: {
                     color: 'white',
@@ -431,12 +429,12 @@ const FourthSelection = ({ props }) => {
             },
             {
                 label: 'Mietende',
-                data: dataFillMietende,
+                data: dataDiscountMietende,
                 backgroundColor: 'rgba(0, 155, 180, 0.15)',
                 datalabels: {
                     color: 'black',
                     anchor: 'end',
-                    align: 'bottom',
+                    align: 'top',
                     font: {
                         family: 'Univers B'
                     },
@@ -467,7 +465,7 @@ const FourthSelection = ({ props }) => {
                 datalabels: {
                     color: 'black',
                     anchor: 'end',
-                    align: 'bottom',
+                    align: 'top',
                     font: {
                         family: 'Univers B'
                     },
@@ -483,91 +481,104 @@ const FourthSelection = ({ props }) => {
     };
 
     return (
-        <div className='report-section'>
-            {props.currentState === 5
-                ? (<Row className='mb-5 align-items-center'>
-                    <Col md={10}>
-                        <Stack direction='horizontal' gap={3} className='justify-content-start'>
-                            <div>
-                                10 Jahre <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
-                                Gesamtkosten
-                            </div>
-                            <div className={showDiscount ? 'cross-text' : ''}>{CalculateYearlyCost(dataFillVermietende)} €
-                            </div>
-                            {showDiscount
-                                ? (<><div className='discount-text'>{parseFloat(CalculateYearlyCost(dataFillVermietende) - (CalculateYearlyCost(dataFillVermietende) * 0.08)).toFixed(2)} €</div>
-                                    <InfoModal currentState={props.currentState} InfoToShow={5}></InfoModal></>)
-                                : ('')}
-                        </Stack>
-                    </Col>
-                    <Col md={2}>
-                        <Stack>
-                            <img className='icon-heizung' src={showDiscount ? IconHeizungsActive : IconHeizungsCheck} alt='IconHeizungCheck' onClick={showDiscountChart} />
-                            <p>HeizungsCheck</p>
-                        </Stack>
-                    </Col>
-                </Row>)
-                : (<Row className='mb-5'>
-                    <Stack direction="horizontal" gap={3}>
-                        <Stack direction="horizontal" gap={3}>
-                            <Stack direction="horizontal" gap={3}>
-                                <div className='choice-item'>
-                                    <img src={selectedIcon} alt='item-icon' />
-                                    <p className='choice-text'>{selectedName}</p>
+        <>
+            <div className='d-flex w-100 mt-3 mb-3'>
+                <BackButton
+                    currentState={props.currentState}
+                    setCurrentState={props.setCurrentState}
+                    setCanContinue={props.setCanContinue} />
+            </div>
+            <div className='report-section'>
+                {props.currentState === 5
+                    ? (<Row className='mb-5 align-items-center'>
+                        <Col md={10}>
+                            <Stack direction='horizontal' gap={3} className='justify-content-start'>
+                                <div className='univers-bold'>
+                                    <div className='d-inline'>10 Jahre</div> <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
+                                    <div>Gesamtkosten</div>
                                 </div>
-                                <div>{props.Consumption.Value} {props.Consumption.Unit}</div>
+                                <div className={`stepper-text ${showDiscount ? 'cross-text' : ''}`}>{CalculateYearlyCost(dataFillVermietende)} €
+                                </div>
+                                {showDiscount
+                                    ? (<><div className='discount-text stepper-text'>{parseFloat(CalculateYearlyCost(dataFillVermietende) - (CalculateYearlyCost(dataFillVermietende) * 0.08)).toFixed(2)} €</div>
+                                        <InfoModal currentState={props.currentState} InfoToShow={5}></InfoModal></>)
+                                    : ('')}
                             </Stack>
-                            <Stack direction="horizontal" gap={3}>
+                        </Col>
+                        <Col md={2}>
+                            <Stack>
+                                <img className='icon-heizung' src={showDiscount ? IconHeizungsActive : IconHeizungsCheck} alt='IconHeizungCheck' onClick={showDiscountChart} />
+                                <p>HeizungsCheck</p>
+                            </Stack>
+                        </Col>
+                    </Row>)
+                    : (<Row className='mb-3'>
+                        <Stack direction="horizontal" gap={3} className='p-0'>
+                            <Stack direction="horizontal" gap={3} className='p-3 white-box'>
+                                <Stack direction="horizontal" gap={3}>
+                                    <div className='choice-item'>
+                                        <img src={selectedIcon} alt='item-icon' />
+                                        <p className='choice-text'>{selectedName}</p>
+                                    </div>
+                                    <div className='univers-bold'>{props.Consumption.Value} {props.Consumption.Unit}</div>
+                                </Stack>
+                                <Stack direction="horizontal" gap={3}>
+                                    <div>
+                                        <img src={IconHouse} alt='house-icon' />
+                                        <p className='choice-text'>Wohnfläche</p>
+                                    </div>
+                                    <div className='univers-bold'>{props.TotalArea} m2</div>
+                                </Stack>
+                            </Stack>
+                            <Stack direction="horizontal" gap={3} className='p-3 white-box'>
                                 <div>
-                                    <img src={IconHouse} alt='house-icon' />
-                                    <p className='choice-text'>Wohnfläche</p>
+                                    <img src={IconCloud} alt='house-icon' />
+                                    <p className='choice-text'>CO<sup>2</sup> Emission</p>
                                 </div>
-                                <div>{props.TotalArea} m2</div>
+                                <div className='univers-bold d-flex align-items-end'><div className='d-inline'>{parseFloat(TotalEmission() / 1000).toFixed(2)} t</div>
+                                    <InfoModal currentState={props.currentState} InfoToShow={3}></InfoModal></div>
+                            </Stack>
+                            <Stack direction="horizontal" gap={3} className='p-3 white-box'>
+                                <div className='univers-bold'>
+                                    <div className='d-inline'>10 Jahre</div> <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
+                                    <div>Gesamtkosten</div>
+                                </div>
+                                <div className='stepper-text'>{CalculateYearlyCost(dataFillVermietende)} €
+                                </div>
                             </Stack>
                         </Stack>
-                        <Stack direction="horizontal" gap={3}>
-                            <div>
-                                <img src={IconCloud} alt='house-icon' />
-                                <p className='choice-text'>CO<sup>2</sup> Emission</p>
-                            </div>
-                            <div>{parseFloat(TotalEmission() / 1000).toFixed(2)} t
-                                <InfoModal currentState={props.currentState} InfoToShow={3}></InfoModal></div>
-                        </Stack>
-                        <Stack direction="horizontal" gap={3}>
-                            <div>
-                                10 Jahre <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
-                                Gesamtkosten
-                            </div>
-                            <div>{CalculateYearlyCost(dataFillVermietende)} €
-                            </div>
-                        </Stack>
-                    </Stack>
-                </Row>)}
+                    </Row>)}
 
-            <Row className='mb-5'>
-                <Stack direction="horizontal" gap={3} className='d-flex align-items-center'>
-                    <div><span className='stepper-text'>Techem CO<sub>2</sub>-Kostenprognose:</span> Ihr Anteil beträgt {CalculateShare()}%</div>
-                    <Stack gap={2} className='align-items-end'>
-                        <div className='d-flex align-items-center'>{100 - CalculateShare()}% Anteil and der CO<sub>2</sub>-Angabe<span className='dot tenant-dot ms-2 me-2'></span>Mietende</div>
-                        <div className='d-flex align-items-center'>{CalculateShare()}% Anteil and der CO<sub>2</sub>-Angabe<span className='dot landlord-dot ms-2 me-2'></span>Vermietende</div>
-                    </Stack>
-                </Stack>
-                <Bar options={chartOptions} data={chartData} />
-            </Row>
-            {props.currentState === 5
-                ? ('')
-                : (<Row className='text-center mb-5'>
-                    <h3 className='stepper-text'>Ihr CO<sup>2</sup>-Kostenanteil beträgt {CalculateShare()}%</h3>
-                    <div>
-                        Dieser Wert ergibt sich aus der Energiebilanz Ihres Gebäudes.
-                        Je besser diese ist, desto niedriger ist Ihr voraussichtlicher Anteil an den CO2-Kosten als Vermieter.
-                        Eine Verabschiedung des Gesetzes steht allerdings noch aus, weshalb es sich um eine unverbindliche Prognose handelt.
-                        <br />
-                        Sie möchten die Energiebilanz Ihrer Immobilie verbessern? Dabei helfen wir Ihnen gerne mit unseren innovativen Lösungen!
-                    </div>
-                </Row>)}
+                <Row className='mb-3 white-box p-3'>
+                    <Col md={6}>
+                        <div><span className='univers-bold'>Techem CO<sub>2</sub>-Kostenprognose:</span> Ihr Anteil beträgt {CalculateShare()}%</div>
+                    </Col>
+                    <Col md={6}>
+                        <Stack direction="horizontal" gap={3} className='d-flex align-items-center mb-3'>
+                            <Stack gap={2} className='align-items-end'>
+                                <div className='d-flex align-items-center tenant-text'>{100 - CalculateShare()}% Anteil and der CO<sub>2</sub>- Angabe<span className='dot tenant-dot ms-2 me-2'></span><span className='black-text'>Mietende</span></div>
+                                <div className='d-flex align-items-center landlord-text'>{CalculateShare()}% Anteil and der CO<sub>2</sub>- Angabe<span className='dot landlord-dot ms-2 me-2'></span><span className='univers-bold black-text'>Vermietende</span></div>
+                            </Stack>
+                        </Stack>
+                    </Col>
+                    <Bar options={chartOptions} data={chartData} />
+                </Row>
+                {props.currentState === 5
+                    ? ('')
+                    : (<Row className='text-center white-box pt-3 ps-3 pe-3 extra-space'>
+                        <h3 className='stepper-text'>Ihr CO<sub>2</sub>-Kostenanteil beträgt {CalculateShare()}%</h3>
+                        <div>
+                            Dieser Wert ergibt sich aus der Energiebilanz Ihres Gebäudes.
+                            Je besser diese ist, desto niedriger ist Ihr voraussichtlicher Anteil an den CO2-Kosten als Vermieter.
+                            Eine Verabschiedung des Gesetzes steht allerdings noch aus, weshalb es sich um eine unverbindliche Prognose handelt.
+                            <br />
+                            <br />
+                            Sie möchten die Energiebilanz Ihrer Immobilie verbessern? Dabei helfen wir Ihnen gerne mit unseren innovativen Lösungen!
+                        </div>
+                    </Row>)}
 
-        </div>
+            </div>
+        </>
     )
 }
 

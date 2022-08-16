@@ -2,13 +2,6 @@
     border: none;
     background-color: white;
     position: relative;
-    width: 100%;
-}
-
-.btn-back img {
-    position: absolute;
-    left: 0px;
-    top: -85px;
 }
 
 .btn-continue {
@@ -30,3 +23,7 @@
     color: #605E5C80;
 }
 
+.grey-box-alt {
+    background-color: #ebebeb;
+    margin-left: -25px;
+}

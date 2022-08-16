@@ -51,6 +51,10 @@ input[type=number] {
     font-family: 'Univers B';
 }
 
+.unit-meter {
+    margin-left: -1.8em;
+}
+
 .active-unit {
     background-color: white !important;
     border-left: none !important;
@@ -76,6 +80,10 @@ input[type=number] {
     border-radius: 0px 0px 50px 0px;
 }
 
+.white-box {
+    background-color: white;
+}
+
 .report-section .hstack {
     justify-content: space-between;
     align-items: end;
@@ -97,8 +105,22 @@ input[type=number] {
     background-color: rgba(0, 155, 180, 1);
 }
 
+.landlord-text {
+    color: rgba(0, 155, 180, 1);
+    font-size: 11px;
+}
+
 .tenant-dot {
     background-color: rgba(0, 155, 180, 0.15);
+}
+
+.tenant-text {
+    color: rgba(0, 155, 180, 0.15);
+    font-size: 11px;
+}
+
+.black-text {
+    color: black;
 }
 
 .icon-heizung {
@@ -112,4 +134,12 @@ input[type=number] {
 
 .discount-text {
     color: #E20613;
+}
+
+.extra-space {
+    padding-bottom: 100px;
+}
+
+.move-top {
+    margin-top: -75px;
 }

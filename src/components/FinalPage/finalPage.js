@@ -8,17 +8,13 @@ import { Button, Stack, Row } from 'react-bootstrap'
 
 import './style.css'
 
-const handleClick = () => {
-    console.log('handle click here..')
-}
-
 const FinalPage = () => {
     return (
         <div>
             <Row className='final-headline mb-5'>
                 <img src={ImageFinalOne} alt='ImageFinalOne' />
                 <h3 className='stepper-text'>Steigern Sie durch Energieeffizienz <br /> den Wert Ihrer Immobilie</h3>
-                <Button className='col-md-3' variant="continue" onClick={handleClick}>Direkt zum HeizungsCheck</Button>
+                <Button className='col-md-3' variant="continue" href='#anchor'>Direkt zum HeizungsCheck</Button>
             </Row>
             <Row className='mb-5'>
                 <h4 className='stepper-text'>Energie sparen mit Techem</h4>
@@ -31,7 +27,7 @@ const FinalPage = () => {
                     <div>
                         <img src={ImageFinalTwo} alt='ImageFinalTwo' />
                     </div>
-                    <div>
+                    <Stack className='justify-content-between'>
                         <h4 className='stepper-text'>
                             Unkompliziert Abgaben reduzieren mit unseren Energiespartipps
                         </h4>
@@ -39,13 +35,13 @@ const FinalPage = () => {
                             Damit Ihre Mieter ihren Verbrauch noch einfacher reduzieren können, haben wir sieben einfache Tipps zum Thema „Clever heizen“ zusammengestellt.
                             Hier erfahren Sie, was die optimale Raumtemperatur ist, wie man richtig lüftet und wie sich bis zu 50 kg CO2 im Jahr - quasi im Schlaf - sparen lassen!
                         </p>
-                        <Button variant='continue'>Gleich reinlesen</Button>
-                    </div>
+                        <Button variant='continue' className='col-md-4'>Gleich reinlesen</Button>
+                    </Stack>
                 </Stack>
             </Row>
             <Row className='mb-5'>
                 <Stack direction='horizontal' gap={3}>
-                    <div>
+                    <Stack className='justify-content-between'>
                         <h4 className='stepper-text'>
                             Unterjährige Verbrauchsinfo
                         </h4>
@@ -54,14 +50,14 @@ const FinalPage = () => {
                             Denn: Nur wer seinen Verbrauch kennt, kann gezielt Energie sparen.
                             Aktivieren Sie noch heute die EED-Verbrauchsinfo!
                         </p>
-                        <Button variant='continue'>Mehr erfahren</Button>
-                    </div>
+                        <Button variant='continue' className='col-md-4'>Mehr erfahren</Button>
+                    </Stack>
                     <div>
                         <img src={ImageFinalThree} alt='ImageFinalTwo' />
                     </div>
                 </Stack>
             </Row>
-            <Row className='grey-box justify-content-center mb-5'>
+            <Row className='grey-box justify-content-center mb-5' id='anchor'>
                 <img className='p-0' src={ImageFinalFour} alt='ImageFinalFour' />
                 <div className='red-circle' onClick={() => console.log('clicked')}>
                     <p className='mt-4'>Klicken und <br />sparen</p>
