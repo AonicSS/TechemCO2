@@ -252,7 +252,7 @@ const FourthSelection = ({ props }) => {
 
     useEffect(() => {
         console.log('effect fired')
-        axios.get('http://localhost:3001/')
+        axios.get('https://techemco2server.azurewebsites.net/')
             .then((response) => {
                 setFetchedData(response.data)
             })
