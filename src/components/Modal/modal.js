@@ -56,7 +56,7 @@ const InfoModal = (props) => {
                             {selectedHeaderText ? (<Modal.Title className='mb-2'>{selectedHeaderText}</Modal.Title>) : ''}
                             {selectedBodyText}</Modal.Body>
                         <Modal.Footer>
-                            <Button variant="continue" onClick={handleClose}>
+                            <Button variant="continue" className='rounded-pill' onClick={handleClose}>
                                 Schließen
                             </Button>
                         </Modal.Footer>
