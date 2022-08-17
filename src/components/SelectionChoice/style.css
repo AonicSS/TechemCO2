@@ -9,15 +9,38 @@
     align-items: center;
 }
 
-
-input[type='radio'] {
-    accent-color: #E20613;
+input[type="radio"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 to remove gradient background */
+    background-color: #fff;
+    /* Not removed via appearance */
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.1em solid #c6c6c6;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
 }
 
-.form-check-input:checked {
-    background-color: #E20613;
-    border-color: #E20613;
+input[type="radio"]::before {
+    content: "";
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em #E20613;
 }
+
+input[type="radio"]:checked::before {
+    transform: scale(1);
+}
+
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -91,6 +114,14 @@ input[type=number] {
 
 .report-section .choice-text {
     margin-bottom: 0px;
+}
+
+.blue-border {
+    border: 2px solid rgba(0, 155, 180, 1)
+}
+
+.blue-border-dashed {
+    border: 2px dashed rgba(0, 155, 180, 1);
 }
 
 .dot {
