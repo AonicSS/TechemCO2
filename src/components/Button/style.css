@@ -4,13 +4,17 @@
     position: relative;
 }
 
+.btn-back-offset {
+    margin-top: -10px;
+    margin-left: -240px;
+}
+
 .btn-continue {
     background-color: #E20613;
     color: white;
     padding: 15px 25px;
     border: none;
-    border-radius: 25px;
-    font-weight: bold;
+    font-family: Univers B;
 }
 
 .btn-continue:hover {

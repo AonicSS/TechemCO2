@@ -49,8 +49,8 @@ const ContinueButton = (props) => {
     return (
         <>
             {props.canContinue
-                ? (<Button variant="continue" className={customClass ? customClass : ''} onClick={handleNext(props)}>{BtnName}</Button>)
-                : (<Button variant="continue" disabled>{BtnName}</Button>)}
+                ? (<Button variant="continue" className={`rounded-pill ${customClass ? customClass : ''}`} onClick={handleNext(props)}>{BtnName}</Button>)
+                : (<Button variant="continue" className="rounded-pill" disabled>{BtnName}</Button>)}
         </>
     )
 }
@@ -61,7 +61,7 @@ const BackButton = (props) => {
             ? ('') :
             (<button className={`btn-back univers-bold ${props.currentState === 4 ? 'grey-box-alt' : ''}`}
                 onClick={handlePrevious(props)}>
-                <img src={IconBack} alt='back-icon' />
+                <img className={props.currentState < 3 ? ('btn-back-offset') : ('') } src={IconBack} alt='back-icon' />
                 {props.currentState === 4 ? 'Zurück' : ''}
             </button>)
 
