@@ -60,19 +60,26 @@ input[type=number] {
 }
 
 .unit.btn-group {
-    margin-left: -6.5em;
-}
-
-.unit .btn {
-    border: 1px solid #c6c6c6;
-    background-color: #C6C6C6;
-    border: none;
+    margin-left: -5.6em;
+    gap: 5px;
 }
 
 .unit {
     margin-left: -1.3em;
-    font-family: 'Univers B';
 }
+
+.unit-item {
+    background-color: #EDEBE9;
+    border-radius: 0px;
+    padding: 7px;
+    cursor: pointer;
+    color: #605E5C80;
+}
+
+.unit-item:hover {
+    color: black;
+}
+
 
 .unit-meter {
     margin-left: -1.8em;
@@ -80,11 +87,12 @@ input[type=number] {
 
 .active-unit {
     background-color: white !important;
+    color: black;
     border-left: none !important;
 }
 
 .consent-text {
-    font-size: 13px;
+    font-size: 10px;
 }
 
 .email-img-content {
