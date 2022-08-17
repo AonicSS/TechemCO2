@@ -33,7 +33,7 @@ const Selection = (props) => {
     return (
         <div className='choice-item'>
             <img src={props.imageUrl} alt={props.name} />
-            <p className='choice-text'>{props.name}</p>
+            <p className='choice-text mt-2'>{props.name}</p>
             <input type='radio'
                 name='choice-item'
                 id={`choice-${props.name}`}
@@ -89,7 +89,8 @@ const FirstSelection = ({ props }) => {
     }
 
     const handleUnitChange = (event) => {
-        setSelectedUnit(event.target.innerHTML)
+        console.log(event.target.textContent)
+        setSelectedUnit(event.target.textContent)
     }
 
     let selectedName, selectedIcon
@@ -114,16 +115,16 @@ const FirstSelection = ({ props }) => {
             <Stack direction='horizontal' gap={3}>
                 <div className='choice-item'>
                     <img src={selectedIcon} alt='item-icon' />
-                    <p className='choice-text'>{selectedName}</p>
+                    <p className='choice-text mt-2'>{selectedName}</p>
                 </div>
                 <Form>
-                    <Form.Group className='d-flex align-items-center' controlId="formInput">
+                    <Form.Group className='d-flex align-items-center position-relative' controlId="formInput">
                         <Form.Control type="number" placeholder="Wert eintragen" className={`pt-2 ${addPadding ? 'pe-5' : 'pe-4'}`} onChange={handleInputChange(props)} />
                         {selectedName !== 'Erdgas'
                             ? (<span className='unit'>L</span>)
                             : (<ButtonGroup className='unit'>
-                                <Button variant='unit' className={SelectedUnit === 'kWh' ? 'active-unit' : ''} onClick={handleUnitChange}>kWh</Button>
-                                <Button variant='unit' className={SelectedUnit === 'm3' ? 'active-unit' : ''} onClick={handleUnitChange}>m3</Button>
+                                <div className={`unit-item ${SelectedUnit === 'kWh' ? 'active-unit' : ''}`} onClick={handleUnitChange}>kWh</div>
+                                <div className={`unit-item ${SelectedUnit === 'm3' ? 'active-unit' : ''}`} onClick={handleUnitChange}>m<sup>3</sup></div>
                             </ButtonGroup>)}
                     </Form.Group>
                 </Form>
@@ -147,12 +148,12 @@ const SecondSelection = ({ props }) => {
             <Stack direction='horizontal' gap={3}>
                 <div className='choice-item'>
                     <img src={IconHouse} alt='item-icon' />
-                    <p className='choice-text'>Wohnfläche</p>
+                    <p className='choice-text 2'>Wohnfläche</p>
                 </div>
                 <Form>
                     <Form.Group className='d-flex align-items-center' controlId="formInput">
                         <Form.Control type="number" placeholder="Wert eintragen" className={`pt-2 pe-4`} onChange={handleInputChange(props)} />
-                        <span className='unit unit-meter'>m2</span>
+                        <span className='unit unit-meter'>m<sup>2</sup></span>
                     </Form.Group>
                 </Form>
             </Stack>
@@ -208,15 +209,15 @@ const ThirdSelection = ({ props }) => {
                     setCanContinue={props.setCanContinue} />
             </Col>
             <Col md={5} className='ps-0'>
-                <h3 className='stepper-text text-center'>
-                    Ihre kostenlose CO2-Kostenprognose <br /> ist nur einen Klick entfernt
+                <h3 className='stepper-text text-center mb-5'>
+                    Ihre kostenlose CO<sub>2</sub>-Kostenprognose <br /> ist nur einen Klick entfernt
                 </h3>
-                <p>
+                <p className='mb-5'>
                     Geben Sie einfach Ihre E-Mail-Adresse an und erhalten
                     Sie von uns gebührenfrei Ihre individuelle Prognose sowie wertvolle Energiespartipps!
                 </p>
                 <Form>
-                    <Form.Group controlId="formInput" className='mb-4 col-md-8 d-flex flex-column ms-auto me-auto'>
+                    <Form.Group controlId="formInput" className='mb-5 col-md-8 d-flex flex-column ms-auto me-auto'>
                         <Form.Label>E-mail</Form.Label>
                         <Form.Control type="email" placeholder="E-Mail eintragen" onChange={handleEmailChange} className='mb-5' />
                         <ContinueButton currentSelected={props.currentSelected}
@@ -251,7 +252,6 @@ const FourthSelection = ({ props }) => {
     }, [])
 
     useEffect(() => {
-        console.log('effect fired')
         axios.get('https://techemco2server.azurewebsites.net/')
             .then((response) => {
                 setFetchedData(response.data)
@@ -284,7 +284,6 @@ const FourthSelection = ({ props }) => {
     }
 
     const CalculateTotalEmission = (selectedData) => {
-        console.log(selectedData)
         return ((((parseInt(props.Consumption.Value)
             * selectedData.Heizwert) / selectedData.Brennwert)
             * selectedData.EmissionFactor) / 1000)
@@ -294,34 +293,34 @@ const FourthSelection = ({ props }) => {
         const perMeterEmission = TotalEmission() / props.TotalArea
         switch (true) {
             case (perMeterEmission < 12):
-                console.log('Your share is 0')
+
                 return 0
             case (12 < perMeterEmission && perMeterEmission < 17):
-                console.log('Your share is 10')
+
                 return 10
             case (17 < perMeterEmission && perMeterEmission < 22):
-                console.log('Your share is 20')
+
                 return 20
             case (22 < perMeterEmission && perMeterEmission < 27):
-                console.log('Your share is 30')
+
                 return 30
             case (27 < perMeterEmission && perMeterEmission < 32):
-                console.log('Your share is 40')
+
                 return 40
             case 32 < perMeterEmission && perMeterEmission < 37:
-                console.log('Your share is 50')
+
                 return 50
             case 37 < perMeterEmission && perMeterEmission < 42:
-                console.log('Your share is 60')
+
                 return 60
             case 42 < perMeterEmission && perMeterEmission < 47:
-                console.log('Your share is 70')
+
                 return 70
             case 47 < perMeterEmission && perMeterEmission < 52:
-                console.log('Your share is 80')
+
                 return 80
             case perMeterEmission >= 52:
-                console.log('Your share is 90')
+
                 return 90
             default:
                 return 0
@@ -330,6 +329,31 @@ const FourthSelection = ({ props }) => {
 
     const showDiscountChart = () => {
         setShowDiscount(!showDiscount)
+    }
+
+    const labels = ['2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032']
+
+    const dataFillMietende = labels.map((item, index) => {
+        if (index === 0) {
+            return parseFloat(TotalEmission() / 1000 * InitialPricePerTon).toFixed(2)
+        } else if (index === 1) {
+            return parseFloat(TotalEmission() / 1000 * (InitialPricePerTon + 10)).toFixed(2)
+        } else {
+            return parseFloat(TotalEmission() / 1000 * (InitialPricePerTon + 20)).toFixed(2)
+        }
+    })
+
+    const dataFillVermietende = dataFillMietende.map((item) => parseFloat((item * (CalculateShare() / 100))).toFixed(2))
+
+    const dataDiscountMietende = dataFillMietende.map((item) => parseFloat(item - (item * 0.08)).toFixed(2))
+
+    const dataDiscountVermietende = dataDiscountMietende.map((item) => parseFloat((item * (CalculateShare() / 100))).toFixed(2))
+
+    const CalculateYearlyCost = (data) => {
+        const sum = data.reduce((partial, current) => {
+            return parseFloat(partial) + parseFloat(current)
+        }, [0])
+        return parseFloat(sum).toFixed(2)
     }
 
     ChartJS.register(
@@ -356,11 +380,12 @@ const FourthSelection = ({ props }) => {
                 }
             },
             y: {
-                display: false,
+                display: true,
                 stacked: false,
                 grid: {
-                    display: false
-                }
+                    drawOnChartArea: false
+                },
+
             },
         },
         layout: {
@@ -368,31 +393,6 @@ const FourthSelection = ({ props }) => {
                 top: 20
             }
         }
-    }
-
-    const labels = ['2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032']
-
-    let dataFillMietende = labels.map((item, index) => {
-        if (index === 0) {
-            return parseFloat(TotalEmission() / 1000 * InitialPricePerTon).toFixed(2)
-        } else if (index === 1) {
-            return parseFloat(TotalEmission() / 1000 * (InitialPricePerTon + 10)).toFixed(2)
-        } else {
-            return parseFloat(TotalEmission() / 1000 * (InitialPricePerTon + 20)).toFixed(2)
-        }
-    })
-
-    let dataFillVermietende = dataFillMietende.map((item) => parseFloat((item * (CalculateShare() / 100))).toFixed(2))
-
-    let dataDiscountMietende = dataFillMietende.map((item) => parseFloat(item - (item * 0.08)).toFixed(2))
-
-    let dataDiscountVermietende = dataDiscountMietende.map((item) => parseFloat((item * (CalculateShare() / 100))).toFixed(2))
-
-    const CalculateYearlyCost = (data) => {
-        const sum = data.reduce((partial, current) => {
-            return parseFloat(partial) + parseFloat(current)
-        }, [0])
-        return parseFloat(sum).toFixed(2)
     }
 
     let dataset
@@ -410,6 +410,7 @@ const FourthSelection = ({ props }) => {
                     font: {
                         family: 'Univers B'
                     },
+                    display: 'true',
                     formatter: (value) => { return value + ' €' }
                 }
             },
@@ -424,8 +425,9 @@ const FourthSelection = ({ props }) => {
                     font: {
                         family: 'Univers B'
                     },
+                    display: 'auto',
                     formatter: (value) => { return value + ' €' }
-                }
+                },
             },
             {
                 label: 'Mietende',
@@ -527,23 +529,23 @@ const FourthSelection = ({ props }) => {
                                         <img src={IconHouse} alt='house-icon' />
                                         <p className='choice-text'>Wohnfläche</p>
                                     </div>
-                                    <div className='univers-bold'>{props.TotalArea} m2</div>
+                                    <div className='univers-bold'>{props.TotalArea} m<sup>2</sup></div>
                                 </Stack>
                             </Stack>
-                            <Stack direction="horizontal" gap={3} className='p-3 white-box'>
+                            <Stack direction="horizontal" gap={3} className='p-3 white-box blue-border-dashed'>
                                 <div>
                                     <img src={IconCloud} alt='house-icon' />
-                                    <p className='choice-text'>CO<sup>2</sup> Emission</p>
+                                    <p className='choice-text'>CO<sub>2</sub> Emission</p>
                                 </div>
                                 <div className='univers-bold d-flex align-items-end'><div className='d-inline'>{parseFloat(TotalEmission() / 1000).toFixed(2)} t</div>
                                     <InfoModal currentState={props.currentState} InfoToShow={3}></InfoModal></div>
                             </Stack>
-                            <Stack direction="horizontal" gap={3} className='p-3 white-box'>
+                            <Stack direction="horizontal" gap={3} className='p-3 white-box blue-border'>
                                 <div className='univers-bold'>
                                     <div className='d-inline'>10 Jahre</div> <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
                                     <div>Gesamtkosten</div>
                                 </div>
-                                <div className='stepper-text'>{CalculateYearlyCost(dataFillVermietende)} €
+                                <div className='stepper-text mb-4'>{CalculateYearlyCost(dataFillVermietende)} €
                                 </div>
                             </Stack>
                         </Stack>

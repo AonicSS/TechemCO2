@@ -44,6 +44,10 @@
     font-family: Univers Roman;
   }
 
+  .form-control {
+    border-radius: 0px;
+  }
+  
   input {
     font-family: Univers B;
   }
