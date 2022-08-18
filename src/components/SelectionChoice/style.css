@@ -182,3 +182,7 @@ input[type=number] {
 .move-top {
     margin-top: -75px;
 }
+
+.hidden-element-selection-4, .hidden-element-selection-5 {
+    display: none;
+}

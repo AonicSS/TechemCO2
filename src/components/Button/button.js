@@ -2,26 +2,38 @@ import React from "react"
 import { Button } from "react-bootstrap"
 import "./style.css"
 import IconBack from '../../assets/icons/IconBack.svg'
-import html2canvas from 'html2canvas'
-import { jsPDF } from "jspdf"
+// import { jsPDF } from "jspdf"
+// import html2canvas from 'html2canvas'
+import html2pdf from 'html2pdf.js'
 
 
 
 const handleNext = (props) => () => {
     if (props.currentState === 5) {
-        const input = document.getElementsByClassName('report-section')[0]
-        html2canvas(input)
-            .then((canvas) => {
-                const imgData = canvas.toDataURL('image/png')
-                const pdf = new jsPDF({
-                    orientation: 'l',
-                    unit: 'pt',
-                    format: [canvas.width + 160, canvas.height + 160],
-                })
-                pdf.addImage(imgData, 'PNG', 65, 40, canvas.width, canvas.height, 'kostenprognose', 'SLOW');
-                const pdfURL = pdf.output("bloburl")
-                window.open(pdfURL, "_blank")
-            })
+        const report = document.getElementById('report-content')
+        console.log(report)
+        report.getElementsByTagName('canvas')[0].setAttribute('style', 'width: 575px !important')
+        report.getElementsByTagName('canvas')[0].setAttribute('style', 'height: auto !important')
+        const chartSection = document.getElementById('chart-section')
+        chartSection.append(report)
+        const input = document.getElementById('pdf-section')
+        input.style.display = 'block'
+        var opt = {
+            margin: 1,
+            filename: 'myfile.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        // html2pdf().set(opt).from(input).save();
+        html2pdf().set(opt).from(input).outputPdf('blob').then((result) => {
+            console.log(result)
+            var fileURL = window.URL.createObjectURL(result);
+            let tab = window.open();
+            tab.location.href = fileURL;
+            window.location.reload()
+        });
         return
     }
     props.setCurrentState(props.currentState + 1)
@@ -61,7 +73,7 @@ const BackButton = (props) => {
             ? ('') :
             (<button className={`btn-back univers-bold ${props.currentState === 4 ? 'grey-box-alt' : ''}`}
                 onClick={handlePrevious(props)}>
-                <img className={props.currentState < 3 ? ('btn-back-offset') : ('') } src={IconBack} alt='back-icon' />
+                <img className={props.currentState < 3 ? ('btn-back-offset') : ('')} src={IconBack} alt='back-icon' />
                 {props.currentState === 4 ? 'Zurück' : ''}
             </button>)
 
