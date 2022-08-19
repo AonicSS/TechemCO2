@@ -11,10 +11,10 @@ import html2pdf from 'html2pdf.js'
 const handleNext = (props) => () => {
     if (props.currentState === 5) {
         const report = document.getElementById('report-content')
-        console.log(report)
-        report.getElementsByTagName('canvas')[0].setAttribute('style', 'width: 575px !important')
-        report.getElementsByTagName('canvas')[0].setAttribute('style', 'height: auto !important')
         const chartSection = document.getElementById('chart-section')
+        const barCanvas = document.getElementById('bar-canvas')
+        report.setAttribute('style', 'padding:0px !important')
+        barCanvas.getElementsByTagName('canvas')[0].setAttribute('style', 'width: 565px')
         chartSection.append(report)
         const input = document.getElementById('pdf-section')
         input.style.display = 'block'

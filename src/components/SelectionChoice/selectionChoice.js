@@ -89,7 +89,6 @@ const FirstSelection = ({ props }) => {
     }
 
     const handleUnitChange = (event) => {
-        console.log(event.target.textContent)
         setSelectedUnit(event.target.textContent)
     }
 
@@ -366,12 +365,17 @@ const FourthSelection = ({ props }) => {
             if (chart.$datalabels._datasets.length === 3) {
                 datasetToSelect = 2
             }
-            const { ctx, chartArea: { left }} = chart
+            const { ctx, chartArea: { left }, scales: { x } } = chart
             for (let i = 0; i < chart.getDatasetMeta(datasetToSelect).data.length; i++) {
-                if (i > 0 && (chart.getDatasetMeta(datasetToSelect).data[i].$context.raw === chart.getDatasetMeta(datasetToSelect).data[i - 1].$context.raw)) {
-                    break
+                // if (i > 1 && (chart.getDatasetMeta(datasetToSelect).data[i].$context.raw === chart.getDatasetMeta(datasetToSelect).data[i - 1].$context.raw)) {
+                //     break
+                // }
+
+                // show first second and last
+                if (i > 1 && i < chart.getDatasetMeta(datasetToSelect).data.length - 1) {
+                    continue
                 }
-                const xPostion = left
+                const xPostion = left - 40
                 const yPostion = chart.getDatasetMeta(datasetToSelect).data[i].y
 
                 ctx.save()
@@ -379,10 +383,10 @@ const FourthSelection = ({ props }) => {
                 ctx.setLineDash([2, 5])
                 ctx.lineWidth = "2"
                 ctx.beginPath()
-                ctx.moveTo(left, yPostion);
-                ctx.lineTo(chart.getDatasetMeta(datasetToSelect).data[i].x + 40, yPostion);
+                ctx.moveTo(x.getPixelForValue(i) + ((x.getPixelForValue(i + 1) - x.getPixelForValue(i)) / 2 - 6), yPostion);
+                ctx.lineTo(xPostion, yPostion);
                 ctx.stroke();
-                ctx.fillText(chart.getDatasetMeta(datasetToSelect).data[i].$context.raw + " €", xPostion, yPostion - 5)
+                ctx.fillText(chart.getDatasetMeta(datasetToSelect).data[i].$context.raw + " €", xPostion, yPostion - 10)
             }
         }
     }
@@ -398,6 +402,7 @@ const FourthSelection = ({ props }) => {
 
     const chartOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             title: {
                 display: false,
@@ -422,7 +427,8 @@ const FourthSelection = ({ props }) => {
         },
         layout: {
             padding: {
-                top: 20
+                top: 20,
+                left: 50
             }
         }
     }
@@ -444,7 +450,9 @@ const FourthSelection = ({ props }) => {
                     },
                     display: 'true',
                     formatter: (value) => { return value + ' €' }
-                }
+                },
+                barPercentage: 0.9,
+                categoryPercentage: 1
             },
             {
                 label: 'Vermietende',
@@ -460,6 +468,8 @@ const FourthSelection = ({ props }) => {
                     display: 'auto',
                     formatter: (value) => { return value + ' €' }
                 },
+                barPercentage: 0.9,
+                categoryPercentage: 1
             },
             {
                 label: 'Mietende',
@@ -468,6 +478,8 @@ const FourthSelection = ({ props }) => {
                 datalabels: {
                     display: false
                 },
+                barPercentage: 0.9,
+                categoryPercentage: 1
             },
         ]
     } else {
@@ -484,7 +496,9 @@ const FourthSelection = ({ props }) => {
                         family: 'Univers B'
                     },
                     formatter: (value) => { return value + ' €' }
-                }
+                },
+                barPercentage: 0.9,
+                categoryPercentage: 1
             },
             {
                 label: 'Mietende',
@@ -492,7 +506,9 @@ const FourthSelection = ({ props }) => {
                 backgroundColor: 'rgba(0, 155, 180, 0.15)',
                 datalabels: {
                     display: false
-                }
+                },
+                barPercentage: 0.9,
+                categoryPercentage: 1
             },
         ]
     }
@@ -518,10 +534,10 @@ const FourthSelection = ({ props }) => {
                                 <div className='d-inline'>10 Jahre</div> <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
                                 <div>Gesamtkosten</div>
                             </div>
-                            <div className={`stepper-text ${showDiscount ? 'cross-text' : ''}`}>{CalculateYearlyCost(dataFillVermietende)} €
+                            <div className={`stepper-text fs-40 ${showDiscount ? 'cross-text' : ''}`}>{CalculateYearlyCost(dataFillVermietende)} €
                             </div>
                             {showDiscount
-                                ? (<><div className='discount-text stepper-text'>{parseFloat(CalculateYearlyCost(dataFillVermietende) - (CalculateYearlyCost(dataFillVermietende) * 0.08)).toFixed(2)} €</div>
+                                ? (<><div className='discount-text stepper-text fs-40'>{parseFloat(CalculateYearlyCost(dataFillVermietende) - (CalculateYearlyCost(dataFillVermietende) * 0.08)).toFixed(2)} €</div>
                                     <InfoModal currentState={props.currentState} InfoToShow={5}></InfoModal></>)
                                 : ('')}
                         </Stack>
@@ -535,7 +551,7 @@ const FourthSelection = ({ props }) => {
                 </Row>
                 <Row className={`mb-3 ${props.currentState === 5 ? 'hidden-element-selection-5' : ''}`}>
                     <Stack direction="horizontal" gap={3} className='p-0'>
-                        <Stack direction="horizontal" gap={3} className='p-3 white-box'>
+                        <Stack direction="horizontal" gap={3} className='p-3 white-box d-flex flex-fill'>
                             <Stack direction="horizontal" gap={3}>
                                 <div className='choice-item'>
                                     <img src={selectedIcon} alt='item-icon' />
@@ -544,7 +560,7 @@ const FourthSelection = ({ props }) => {
                                 <div className='univers-bold'>{props.Consumption.Value} {props.Consumption.Unit}</div>
                             </Stack>
                             <Stack direction="horizontal" gap={3}>
-                                <div>
+                                <div className='choice-item'>
                                     <img src={IconHouse} alt='house-icon' />
                                     <p className='choice-text'>Wohnfläche</p>
                                 </div>
@@ -552,40 +568,46 @@ const FourthSelection = ({ props }) => {
                             </Stack>
                         </Stack>
                         <Stack direction="horizontal" gap={3} className='p-3 white-box blue-border-dashed'>
-                            <div>
+                            <div className='choice-item'>
                                 <img src={IconCloud} alt='house-icon' />
                                 <p className='choice-text'>CO<sub>2</sub> Emission</p>
                             </div>
                             <div className='univers-bold d-flex align-items-end'><div className='d-inline'>{parseFloat(TotalEmission() / 1000).toFixed(2)} t</div>
                                 <InfoModal currentState={props.currentState} InfoToShow={3}></InfoModal></div>
                         </Stack>
-                        <Stack direction="horizontal" gap={3} className='p-3 white-box blue-border'>
+                        <Stack direction="horizontal" gap={3} className='p-3 white-box blue-border d-flex flex-fill'>
                             <div className='univers-bold'>
                                 <div className='d-inline'>10 Jahre</div> <InfoModal currentState={props.currentState} InfoToShow={4}></InfoModal> <br />
                                 <div>Gesamtkosten</div>
                             </div>
-                            <div className='stepper-text mb-4'>{CalculateYearlyCost(dataFillVermietende)} €
+                            <div className='stepper-text mb-4 fs-40'>{CalculateYearlyCost(dataFillVermietende)} €
                             </div>
                         </Stack>
                     </Stack>
                 </Row>
-                <Row className='mb-3 white-box p-3' id='report-content'>
+                <Row className='mb-3 white-box p-5' id='report-content'>
                     <Col md={6}>
-                        <div><span className='univers-bold'>Techem CO<sub>2</sub>-Kostenprognose:</span> Ihr Anteil beträgt {CalculateShare()}%</div>
+                        <div><span className='univers-bold fs-22'>Techem CO<sub>2</sub>-Kostenprognose:</span> Ihr Anteil beträgt {CalculateShare()}%</div>
                     </Col>
                     <Col md={6}>
-                        <Stack direction="horizontal" gap={3} className='d-flex align-items-center mb-3'>
-                            <Stack gap={2} className='align-items-end'>
-                                <div className='d-flex align-items-center tenant-text'>{100 - CalculateShare()}% Anteil and der CO<sub>2</sub>- Angabe<span className='dot tenant-dot ms-2 me-2'></span><span className='black-text'>Mietende</span></div>
-                                <div className='d-flex align-items-center landlord-text'>{CalculateShare()}% Anteil and der CO<sub>2</sub>- Angabe<span className='dot landlord-dot ms-2 me-2'></span><span className='univers-bold black-text'>Vermietende</span></div>
-                            </Stack>
-                        </Stack>
+                        <Row className='d-flex align-items-center'>
+                            <Col md={8} className='tenant-text d-flex justify-content-end pe-0'>{100 - CalculateShare()}% Anteil and der CO<sub>2</sub>- Angabe</Col>
+                            <Col md={1}><span className='dot tenant-dot'></span></Col>
+                            <Col md={3} className='ps-0'><span className='black-text'>Mietende</span></Col>
+                            <Col md={8} className='landlord-text d-flex justify-content-end pe-0'>{CalculateShare()}% Anteil and der CO<sub>2</sub>- Angabe</Col>
+                            <Col md={1}><span className='dot landlord-dot'></span></Col>
+                            <Col md={3} className='ps-0'><span className='univers-bold black-text'>Vermietende</span></Col>
+                        </Row>
                     </Col>
-                    <Bar options={chartOptions} data={chartData} />
+                    <Row>
+                        <Col id='bar-canvas'>
+                            <Bar options={chartOptions} data={chartData} />
+                        </Col>
+                    </Row>
                 </Row>
                 {props.currentState === 5
                     ? ('')
-                    : (<Row className='text-center white-box pt-3 ps-3 pe-3 extra-space'>
+                    : (<Row className='text-center white-box pt-5 ps-3 pe-5 extra-space'>
                         <h3 className='stepper-text'>Ihr CO<sub>2</sub>-Kostenanteil beträgt {CalculateShare()}%</h3>
                         <div>
                             Dieser Wert ergibt sich aus der Energiebilanz Ihres Gebäudes.

@@ -30,4 +30,7 @@
 .grey-box-alt {
     background-color: #ebebeb;
     margin-left: -25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
