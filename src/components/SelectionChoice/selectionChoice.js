@@ -414,6 +414,12 @@ const FourthSelection = ({ props }) => {
                 stacked: true,
                 grid: {
                     display: false
+                },
+                ticks: {
+                    padding: 30,
+                    font: {
+                        weight: 'bold',
+                    }
                 }
             },
             y: {
